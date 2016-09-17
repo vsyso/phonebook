@@ -41,13 +41,17 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 /**
- *
+ * PhoneType Model
+ * 
  * @author Vladimir Syso
  */
 @Entity
 @Table(name = "phone_type")
 @XmlRootElement
+@JsonRootName("type")
 @NamedQueries({
     @NamedQuery(name = "PhoneType.findAll", query = "SELECT p FROM PhoneType p"),
     @NamedQuery(name = "PhoneType.findByPhoneTypeId", query = "SELECT p FROM PhoneType p WHERE p.phoneTypeId = :phoneTypeId"),
@@ -81,6 +85,7 @@ public class PhoneType implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Integer getPhoneTypeId() {
         return phoneTypeId;
     }
@@ -98,6 +103,7 @@ public class PhoneType implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<PhoneNumber> getPhoneNumberCollection() {
         return phoneNumberCollection;
     }

@@ -29,6 +29,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,7 +43,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * PhoneMask Model
+ * 
  * @author Vladimir Syso
  */
 @Entity
@@ -65,7 +67,7 @@ public class PhoneMask implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "phone_mask_view")
     private String phoneMaskView;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "phoneMaskId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "phoneMaskId", fetch = FetchType.EAGER)
     private Collection<PhoneNumber> phoneNumberCollection;
 
     public PhoneMask() {
@@ -96,12 +98,7 @@ public class PhoneMask implements Serializable {
     public void setPhoneMaskView(String phoneMaskView) {
         this.phoneMaskView = phoneMaskView;
     }
-
-    @XmlTransient
-    public Collection<PhoneNumber> getPhoneNumberCollection() {
-        return phoneNumberCollection;
-    }
-
+    
     public void setPhoneNumberCollection(Collection<PhoneNumber> phoneNumberCollection) {
         this.phoneNumberCollection = phoneNumberCollection;
     }

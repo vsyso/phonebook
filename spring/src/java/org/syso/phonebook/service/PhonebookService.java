@@ -23,21 +23,24 @@
  */
 package org.syso.phonebook.service;
 
-import java.util.List;
-import javax.annotation.Resource;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.syso.phonebook.domain.Contact;
 import org.syso.phonebook.domain.PhoneMask;
 import org.syso.phonebook.domain.PhoneNumber;
 import org.syso.phonebook.domain.PhoneNumberPK;
 import org.syso.phonebook.domain.PhoneType;
 
+import java.util.List;
+import javax.annotation.Resource;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
- *
+ * Phonebook Service uses Hibernate to manipulate with data
+ * 
  * @author Vladimir Syso
  */
 @Service("phonebookService")
@@ -82,6 +85,7 @@ public class PhonebookService{
         Session session = sessionFactory.getCurrentSession();
         
         Contact contact = (Contact) session.get(Contact.class, contactId);
+        contact.setPhoneNumberCollection(null);
         
         session.delete(contact);
     }
@@ -162,10 +166,12 @@ public class PhonebookService{
      */
     public boolean deletePhoneNumber(Integer contactId, String number) {
         
+        String numbersOnly = number.replaceAll("\\D", "");
+        
         Session session = sessionFactory.getCurrentSession();        
         return session.getNamedQuery("PhoneNumber.deletePhoneNumber")
                 .setInteger("contactId", contactId)
-                .setString("phoneNumber", number).executeUpdate() > 0;
+                .setString("phoneNumber", numbersOnly).executeUpdate() > 0;
         
     }
     
@@ -177,8 +183,12 @@ public class PhonebookService{
      */
     public Contact findContactById(Integer contactId) {
 
+        
         Session session = sessionFactory.getCurrentSession();
         Contact contact = (Contact) session.get(Contact.class, contactId);
+        
+        Hibernate.initialize(contact);
+        
         return contact;
     }
 
@@ -284,10 +294,7 @@ public class PhonebookService{
         }
         
         Session session = sessionFactory.getCurrentSession();    
-        Query query;
-        // There is a Native SQL request since HQL is limited with JOIN operations
-        query = session.createSQLQuery("SELECT c.contact_id, c.first_name, c.last_name FROM contact as c INNER JOIN phone_number as p ON c.contact_id = p.contact_id WHERE p.phone_number LIKE :phoneNumber GROUP BY c.contact_id")
-                .setParameter("phoneNumber", numberToMatch);
+        Query query = session.getNamedQuery("Contact.findByPhoneNumber").setParameter("phoneNumber", numberToMatch);
         
         return query.list();
     }

@@ -23,6 +23,11 @@
  */
 package org.syso.phonebook.controller;
 
+import org.syso.phonebook.domain.Contact;
+import org.syso.phonebook.helpers.ContactsWrapper;
+import org.syso.phonebook.domain.PhoneNumber;
+import org.syso.phonebook.service.PhonebookService;
+
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +42,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.syso.phonebook.domain.Contact;
-import org.syso.phonebook.helpers.ContactsWrapper;
-import org.syso.phonebook.domain.PhoneNumber;
-import org.syso.phonebook.service.PhonebookService;
 
 /**
  * Contact Controller
@@ -53,7 +54,7 @@ public class ContactController {
 
     @Autowired
     private PhonebookService phonebookService;
-
+   
     /**
      * Display All contact entities
      * 
@@ -138,6 +139,7 @@ public class ContactController {
 
     /**
      * Update Contact by id
+     * 
      * @param contactId to edit
      * @param contact object from the POST body
      * @param ucBuilder path builder
@@ -196,12 +198,13 @@ public class ContactController {
      * @return ResponseEntity object
      */
     @RequestMapping(value = "/contact/{id}/add_number",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Void> addPhoneNumber(@PathVariable("id") Integer contactId, 
             @RequestBody PhoneNumber phoneNumber) {
 
         PhoneNumber newNumber = phonebookService.addNumber(contactId, phoneNumber);
-        
+        System.out.println(contactId);
         if (newNumber == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }else if(!Objects.equals(newNumber.getContact().getContactId(), contactId)) {            

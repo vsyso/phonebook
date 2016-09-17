@@ -30,7 +30,8 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
 /**
- *
+ * PhoneNumber foreign key for Contact Model
+ * 
  * @author Vladimir Syso
  */
 @Embeddable

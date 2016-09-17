@@ -23,6 +23,15 @@
  */
 package org.syso.phonebook.domain;
 
+import org.syso.phonebook.helpers.PhoneTypeAdapter;
+import org.syso.phonebook.helpers.PhoneTypeDeserializer;
+import org.syso.phonebook.helpers.PhoneTypeSerializer;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -39,15 +48,16 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.syso.phonebook.helpers.PhoneTypeAdapter;
 
 /**
- *
+ * PhoneNumber Model
+ * 
  * @author Vladimir Syso
  */
 @Entity
 @Table(name = "phone_number")
 @XmlRootElement
+@JsonRootName(value = "phoneNumber")
 @NamedQueries({
     @NamedQuery(name = "PhoneNumber.findAll", query = "SELECT p FROM PhoneNumber p"),
     @NamedQuery(name = "PhoneNumber.findByPhoneNumberId", query = "SELECT p FROM PhoneNumber p WHERE p.phoneNumberPK.phoneNumberId = :phoneNumberId"),
@@ -91,6 +101,7 @@ public class PhoneNumber implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public PhoneNumberPK getPhoneNumberPK() {
         return phoneNumberPK;
     }
@@ -100,6 +111,7 @@ public class PhoneNumber implements Serializable {
     }
 
     @XmlElement(name = "number")
+    @JsonProperty("number")
     public String getPhoneNumber() {
         
         if (phoneMaskId == null) {
@@ -127,6 +139,7 @@ public class PhoneNumber implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Contact getContact() {
         return contact;
     }
@@ -136,6 +149,7 @@ public class PhoneNumber implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public PhoneMask getPhoneMaskId() {
         return phoneMaskId;
     }
@@ -145,11 +159,14 @@ public class PhoneNumber implements Serializable {
     }
     
     @XmlElement(name = "type")
-    @XmlJavaTypeAdapter(PhoneTypeAdapter.class)  
+    @XmlJavaTypeAdapter(PhoneTypeAdapter.class)
+    @JsonProperty("type")
+    @JsonSerialize(using = PhoneTypeSerializer.class)
     public PhoneType getPhoneType() {
         return phoneType;
     }
 
+    @JsonDeserialize(using = PhoneTypeDeserializer.class)
     public void setPhoneType(PhoneType phoneType) {
         this.phoneType = phoneType;
     }

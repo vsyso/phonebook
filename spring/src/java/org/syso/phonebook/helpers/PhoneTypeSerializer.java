@@ -23,42 +23,24 @@
  */
 package org.syso.phonebook.helpers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import java.io.Serializable;
-import java.util.Collection;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import org.syso.phonebook.domain.Contact;
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import org.syso.phonebook.domain.PhoneType;
 
 /**
- * Contacts Wrapper to display a list of Contact objects
+ * Serializer for PhoneType Entity
  * 
  * @author Vladimir Syso
  */
-
-@XmlRootElement(name = "contacts")
-@JsonRootName(value = "contacts")
-public class ContactsWrapper implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private Collection<Contact> contacts;
-
-    /**
-     * @return the contacts
-     */
-    @XmlElement(name = "contact")
-    @JsonProperty("contacts")
-    public Collection<Contact> getContacts() {
-        return contacts;
-    }
-
-    /**
-     * @param contacts the contacts to set
-     */
-    public void setContacts(Collection<Contact> contacts) {
-        this.contacts = contacts;
-    }
-    
+public class PhoneTypeSerializer extends JsonSerializer<PhoneType>{
+ 
+    @Override
+    public void serialize(PhoneType phoneType, JsonGenerator generator, SerializerProvider provider) throws IOException, JsonProcessingException {
+        
+        generator.writeString(phoneType.getPhoneTypeName());
+    }    
 }

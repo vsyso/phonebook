@@ -23,6 +23,8 @@
  */
 package org.syso.phonebook.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -42,18 +44,20 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Contact Model
+ * 
  * @author Vladimir Syso
  */
 @Entity
 @Table(name = "contact")
 @XmlRootElement
+@JsonRootName(value = "contact")
 @NamedQueries({
     @NamedQuery(name = "Contact.findAll", query = "SELECT c FROM Contact c"),
     @NamedQuery(name = "Contact.findByContactId", query = "SELECT c FROM Contact c WHERE c.contactId = :contactId"),
     @NamedQuery(name = "Contact.findByFirstName", query = "SELECT c FROM Contact c WHERE c.firstName = :firstName"),
     @NamedQuery(name = "Contact.findByLastName", query = "SELECT c FROM Contact c WHERE c.lastName = :lastName"),
-    
+    @NamedQuery(name = "Contact.findByPhoneNumber", query = "SELECT c FROM Contact c, PhoneNumber p WHERE c.contactId = p.phoneNumberPK.contactId AND p.phoneNumber LIKE :phoneNumber GROUP BY c.contactId")   
 })
 public class Contact implements Serializable {
 
@@ -69,7 +73,7 @@ public class Contact implements Serializable {
     @Size(max = 45)
     @Column(name = "last_name")
     private String lastName;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contact", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contact", fetch = FetchType.EAGER, orphanRemoval = true)
     private Collection<PhoneNumber> phoneNumberCollection;
 
     public Contact() {
@@ -80,6 +84,7 @@ public class Contact implements Serializable {
     }
 
     @XmlElement(name = "id")
+    @JsonProperty("id")
     public Integer getContactId() {
         return contactId;
     }
@@ -105,6 +110,7 @@ public class Contact implements Serializable {
     }
 
     @XmlElement(name = "phoneNumber")
+    @JsonProperty("phoneNumbers")
     public Collection<PhoneNumber> getPhoneNumberCollection() {
         return phoneNumberCollection;
     }
