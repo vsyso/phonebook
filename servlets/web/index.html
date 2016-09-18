@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Phonebook REST API</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Welcome</h1>
+        <div>Phone Book REST API implementation with <a href="servlet/contacts/">Servlet</a></div>
+        <div>Phone Book REST API implementation with <a href="jersey/contacts/">Jersey</a></div>
+        <h1>API Reference</h1>
+        <div>
+            <div>
+                <p><b>GET</b>  /contact/{id}</p>                
+            </div>
+            <div>
+                <hr>
+                <p><b>PUT</b>  /contact/{id}</p>                
+                <p>XML request example:</p> 
+                <p>
+                    &lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>
+                    &lt;contact&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;firstName>John&lt;/firstName&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;lastName>Doe&lt;/lastName&gt;<br>
+                    &lt;/contact&gt;<br>
+                </p>
+                <p>JSON request example:</p> 
+                <p>
+                    {"firstName":"John","lastName":"Doe"}
+                </p> 
+                <hr>
+            </div>
+            <div>
+                <p><b>POST</b>  /contact</p>
+                <p>XML request example:</p> 
+                <p>
+                    &lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>
+                    &lt;contact&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;firstName>Jack&lt;/firstName&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;lastName>Smith&lt;/lastName&gt;<br>
+                    &lt;/contact&gt;<br>
+                </p>
+                <p>JSON request example:</p> 
+                <p>
+                    {"firstName":"Jack","lastName":"Smith"}
+                </p> 
+                <hr>
+            </div>            
+            <div>
+                <p><b>POST</b> /contact/{id}/add_number</p>
+                <p>XML request example:</p> 
+                <p>
+                    &lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>
+                    &lt;phoneNumber&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;number>+38(056)734-34-22&lt;/number&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;type>Home&lt;/type&gt;<br>
+                    &lt;/phoneNumber&gt;<br>
+                </p>
+                <p>JSON request example:</p> 
+                <p>
+                    {"number":"+38(056)734-34-22","type":"Home"}
+                </p> 
+                <hr>
+            </div>
+            <div>
+                <p><b>DELETE</b>  /contact/{id}</p>  
+            </div>
+            <div>
+                <p><b>DELETE</b> /contact/{id}/{phone_number}</p>  
+            </div>
+            <br/>
+            <div>
+                <p><b>GET</b>  /contacts</p>  
+            </div>
+            <div>
+                <p><b>GET</b>  /contacts/find_by_number?{phone_number}</p>  
+            </div>
+        </div>
+    </body>
+</html>
