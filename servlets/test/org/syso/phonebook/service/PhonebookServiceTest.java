@@ -44,7 +44,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-import org.syso.phonebook.controllers.servlet.helpers.JAXBMapper;
+import org.syso.phonebook.controllers.helpers.JAXBMapper;
 import org.syso.phonebook.domain.Contact;
 import org.syso.phonebook.domain.Contacts;
 import org.syso.phonebook.domain.PhoneNumber;
