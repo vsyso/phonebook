@@ -60,8 +60,8 @@ import org.syso.phonebook.domain.PhoneType;
 public class PhonebookServiceTest {
     
     // Test two following serives via Parameters
-    public static final String JERSEY_REST_SERVICE_URL = "http://localhost:8080/PhonebookServ/jersey";
-    public static final String SERVLET_REST_SERVICE_URL = "http://localhost:8080/PhonebookServ/servlet";
+    public static final String JERSEY_REST_SERVICE_URL = "http://localhost:8080/Phonebook/jersey";
+    public static final String SERVLET_REST_SERVICE_URL = "http://localhost:8080/Phonebook/servlet";
     
     @Parameter
     public String baseURL;
