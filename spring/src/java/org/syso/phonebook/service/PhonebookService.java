@@ -55,7 +55,9 @@ public class PhonebookService{
         Session session = sessionFactory.getCurrentSession();
         
         Query query = session.createQuery("FROM Contact");
-        return query.list();
+        @SuppressWarnings("unchecked")
+        List<Contact> list =  query.list();
+        return list;
     }
 
     /**
@@ -207,6 +209,7 @@ public class PhonebookService{
         Query query = session.getNamedQuery("PhoneNumber.findByPhoneNumber")
                 .setString("phoneNumber", numbersOnly);
         
+        @SuppressWarnings("unchecked")
         List<PhoneNumber> list = query.list();
         if(!list.isEmpty()){
             return list.get(0);
@@ -229,6 +232,7 @@ public class PhonebookService{
         Query query = session.getNamedQuery("PhoneType.findByPhoneTypeName")
                 .setString("phoneTypeName", typeName);
         
+        @SuppressWarnings("unchecked")
         List<PhoneType> typeList = query.list();
         if(!typeList.isEmpty()){
             return typeList.get(0);
@@ -258,6 +262,7 @@ public class PhonebookService{
         Query query = session.getNamedQuery("PhoneMask.findByPhoneMaskView")
                 .setString("phoneMaskView", mask);
         
+        @SuppressWarnings("unchecked")
         List<PhoneMask> maskList = query.list();
         if(!maskList.isEmpty()){
             return maskList.get(0);
@@ -296,7 +301,9 @@ public class PhonebookService{
         Session session = sessionFactory.getCurrentSession();    
         Query query = session.getNamedQuery("Contact.findByPhoneNumber").setParameter("phoneNumber", numberToMatch);
         
-        return query.list();
+        @SuppressWarnings("unchecked")
+        List<Contact> list =  query.list();
+        return list;
     }
 
 }
