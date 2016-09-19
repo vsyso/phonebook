@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.syso.phonebook.controllers.servlet.helpers;
+package org.syso.phonebook.controllers.helpers;
 
 import java.io.StringReader;
 import java.io.Writer;
@@ -37,7 +37,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.eclipse.persistence.jaxb.JAXBContextFactory;
 /**
- *
+ * JAXBMapper to marshal and unmarshal object to JSON or XML
+ * 
  * @author Vladimir Syso
  * @param <T>
  */
@@ -53,6 +54,13 @@ public final class JAXBMapper<T> {
         this.entityClass = entityClass;      
     }
     
+    /**
+     * Unmarshal an object form String
+     * 
+     * @param in string to unmarshal
+     * @param contentType JSON or XML
+     * @return Unmarshaled object
+     */
     public T unmarshal(String in, String contentType){
        
         try {
@@ -60,9 +68,9 @@ public final class JAXBMapper<T> {
             Unmarshaller jaxbUnmarshaller = jc.createUnmarshaller();
 
             jaxbUnmarshaller.setProperty(MarshallerProperties.MEDIA_TYPE, getMediaType(contentType));
-            jaxbUnmarshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, true);
+            jaxbUnmarshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, false);
             
-            StringReader reader = new StringReader(in);
+            StringReader reader = new StringReader(in);            
             JAXBElement<T> root = jaxbUnmarshaller.unmarshal(new StreamSource(reader), entityClass);
             return root.getValue();
 
@@ -73,10 +81,11 @@ public final class JAXBMapper<T> {
     }
 
     /**
-     *
-     * @param object
-     * @param out
-     * @param acceptType
+     * Marshal an object to JSON or XML
+     * 
+     * @param object to marshal
+     * @param out result will be sent to this writer.
+     * @param acceptType JSON or XML
      * @return response media type, JSON or XML
      */
     public String marshal(Object object, Writer out, String acceptType){
@@ -89,6 +98,7 @@ public final class JAXBMapper<T> {
 
             jaxbMarshaller.setProperty(MarshallerProperties.MEDIA_TYPE, mediaType);
             jaxbMarshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, true);
+            jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
             jaxbMarshaller.marshal(object, out);
             return mediaType;
         } catch (JAXBException ex) {

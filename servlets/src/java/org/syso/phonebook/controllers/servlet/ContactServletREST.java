@@ -24,7 +24,7 @@
 
 package org.syso.phonebook.controllers.servlet;
 
-import org.syso.phonebook.controllers.servlet.helpers.JAXBMapper;
+import org.syso.phonebook.controllers.helpers.JAXBMapper;
 import org.syso.phonebook.service.PhonebookService;
 import org.syso.phonebook.domain.Contact;
 import org.syso.phonebook.domain.PhoneNumber;
@@ -52,6 +52,7 @@ import javax.transaction.UserTransaction;
 public class ContactServletREST extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static final String DEFAULT_ENCODING = "UTF-8";
     
     @PersistenceContext(unitName = "PhonebookPU")
     private EntityManager em;   
@@ -99,7 +100,8 @@ public class ContactServletREST extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-            
+         
+        response.setCharacterEncoding(DEFAULT_ENCODING);
         try (PrintWriter out = response.getWriter()) { 
             
             Pair<Integer, String> responseParam;
@@ -110,8 +112,7 @@ public class ContactServletREST extends HttpServlet {
                     
                     responseParam = displayContactById(request.getHeader("accept"), out, contactId);
                     break;
-                case "POST":     
-                    
+                case "POST": 
                     if(pathParts != null && pathParts.length > 0){
                         // Checking for pattern contact/{id}/add_number
                         if(pathParts.length == 3 && pathParts[2].equals("add_number")) {
@@ -310,7 +311,7 @@ public class ContactServletREST extends HttpServlet {
         String data = getPostData(request);
         if(data == null) {
             return HttpServletResponse.SC_BAD_REQUEST;
-        }
+        }   
         
         JAXBMapper<Contact> adapter = new JAXBMapper<>(Contact.class);
         Contact contact = adapter.unmarshal(data, contentType);

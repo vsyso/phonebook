@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.TransactionRequiredException;
 import javax.transaction.HeuristicMixedException;
@@ -102,15 +103,11 @@ public class PhonebookService {
                 ut.begin();
             }
             
-            Contact merged = em.merge(contact);
-            em.remove(merged);
-            em.joinTransaction();
+            em.remove(em.merge(contact));
             
             if(ut != null){
                 ut.commit();
             }
-            
-            em.close();
             
         } catch(SecurityException | IllegalStateException | NotSupportedException | SystemException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
@@ -128,7 +125,6 @@ public class PhonebookService {
      * @param phoneNumber un-filtered phone number
      * @return operation completed successfully or not
      */
-    @Transactional
     public boolean deletePhoneNumber(Integer contactId, String phoneNumber) {        
         
         String numbersOnly = phoneNumber.replaceAll("\\D", "");        
@@ -162,7 +158,7 @@ public class PhonebookService {
     public List<Contact> findAllContacts() {            
         List<Contact> contactsList;
         
-        try{
+        try{            
             contactsList = em.createNamedQuery("Contact.findAll", Contact.class).getResultList();
         }catch(Exception ex)
         {
@@ -339,13 +335,16 @@ public class PhonebookService {
         try {
             if(ut != null){
                 ut.begin();
-            }
+            }           
+               
             em.persist(phoneNumber);
             em.flush();
             
            if(ut != null){
                 ut.commit();
             }
+           
+           
             
         } catch(SecurityException | IllegalStateException | NotSupportedException | SystemException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {   

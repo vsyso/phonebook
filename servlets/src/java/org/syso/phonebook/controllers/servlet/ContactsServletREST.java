@@ -24,7 +24,7 @@
 package org.syso.phonebook.controllers.servlet;
 
 import org.syso.phonebook.domain.Contacts;
-import org.syso.phonebook.controllers.servlet.helpers.JAXBMapper;
+import org.syso.phonebook.controllers.helpers.JAXBMapper;
 import org.syso.phonebook.service.PhonebookService;
 import org.syso.phonebook.domain.Contact;
 
@@ -54,7 +54,8 @@ import javax.transaction.UserTransaction;
 public class ContactsServletREST extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    
+    private static final String DEFAULT_ENCODING = "UTF-8";
+     
     @PersistenceContext(unitName = "PhonebookPU")
     private EntityManager em;
     @Resource
@@ -79,6 +80,8 @@ public class ContactsServletREST extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        response.setCharacterEncoding(DEFAULT_ENCODING);
         
         try (PrintWriter out = response.getWriter()) {
             
